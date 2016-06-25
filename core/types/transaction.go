@@ -207,6 +207,13 @@ func doFrom(tx *Transaction, homestead bool) (common.Address, error) {
 	return addr, nil
 }
 
+func (tx *Transaction) PublicKey(homestead bool) ([]byte, error){
+	pubkey, err := tx.publicKey(homestead);
+	if err != nil {
+		return pubkey, err
+	}
+	return pubkey, err
+}
 // Cost returns amount + gasprice * gaslimit.
 func (tx *Transaction) Cost() *big.Int {
 	total := new(big.Int).Mul(tx.data.Price, tx.data.GasLimit)
@@ -217,7 +224,9 @@ func (tx *Transaction) Cost() *big.Int {
 func (tx *Transaction) SignatureValues() (v byte, r *big.Int, s *big.Int) {
 	return tx.data.V, new(big.Int).Set(tx.data.R), new(big.Int).Set(tx.data.S)
 }
-
+func (tx *Transaction) GetSig()(v byte, r []byte, s []byte){
+	return tx.data.V, tx.data.R.Bytes(), tx.data.S.Bytes()
+}
 func (tx *Transaction) publicKey(homestead bool) ([]byte, error) {
 	if !crypto.ValidateSignatureValues(tx.data.V, tx.data.R, tx.data.S, homestead) {
 		return nil, ErrInvalidSig

@@ -865,11 +865,17 @@ type RPCTransaction struct {
 	GasPrice         *rpc.HexNumber  `json:"gasPrice"`
 	Hash             common.Hash     `json:"hash"`
 	Input            string          `json:"input"`
+	SenderPublicKey  string `json:"senderPublicKey"`
+	V  		 string `json:"v"`
+	R  		 string `json:"r"`
+	S  		 string  `json:"s"`
+	SigHash          common.Hash `json:"sigHash"`
 	Nonce            *rpc.HexNumber  `json:"nonce"`
 	To               *common.Address `json:"to"`
 	TransactionIndex *rpc.HexNumber  `json:"transactionIndex"`
 	Value            *rpc.HexNumber  `json:"value"`
 }
+
 
 // newRPCPendingTransaction returns a pending transaction that will serialize to the RPC representation
 func newRPCPendingTransaction(tx *types.Transaction) *RPCTransaction {
@@ -891,6 +897,10 @@ func newRPCPendingTransaction(tx *types.Transaction) *RPCTransaction {
 func newRPCTransactionFromBlockIndex(b *types.Block, txIndex int) (*RPCTransaction, error) {
 	if txIndex >= 0 && txIndex < len(b.Transactions()) {
 		tx := b.Transactions()[txIndex]
+		pubkey, err := tx.PublicKey(true)
+		sigHash := tx.SigHash()
+		v, r, s := tx.GetSig()
+		var pubkeyString = hex.EncodeToString(pubkey)
 		from, err := tx.FromFrontier()
 		if err != nil {
 			return nil, err
@@ -904,6 +914,11 @@ func newRPCTransactionFromBlockIndex(b *types.Block, txIndex int) (*RPCTransacti
 			GasPrice:         rpc.NewHexNumber(tx.GasPrice()),
 			Hash:             tx.Hash(),
 			Input:            fmt.Sprintf("0x%x", tx.Data()),
+			SenderPublicKey:  string(pubkeyString),
+			V:                fmt.Sprintf("0x%x", v),
+			R:		  hex.EncodeToString(r),
+			S:		  hex.EncodeToString(s),
+			SigHash:          sigHash,
 			Nonce:            rpc.NewHexNumber(tx.Nonce()),
 			To:               tx.To(),
 			TransactionIndex: rpc.NewHexNumber(txIndex),

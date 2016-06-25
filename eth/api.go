@@ -900,7 +900,6 @@ func newRPCTransactionFromBlockIndex(b *types.Block, txIndex int) (*RPCTransacti
 		pubkey, err := tx.PublicKey(true)
 		sigHash := tx.SigHash()
 		v, r, s := tx.GetSig()
-		var pubkeyString = hex.EncodeToString(pubkey)
 		from, err := tx.FromFrontier()
 		if err != nil {
 			return nil, err
@@ -914,7 +913,7 @@ func newRPCTransactionFromBlockIndex(b *types.Block, txIndex int) (*RPCTransacti
 			GasPrice:         rpc.NewHexNumber(tx.GasPrice()),
 			Hash:             tx.Hash(),
 			Input:            fmt.Sprintf("0x%x", tx.Data()),
-			SenderPublicKey:  string(pubkeyString),
+			SenderPublicKey:  hex.EncodeToString(pubkey),
 			V:                fmt.Sprintf("0x%x", v),
 			R:		  hex.EncodeToString(r),
 			S:		  hex.EncodeToString(s),

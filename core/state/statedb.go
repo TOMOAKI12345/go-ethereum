@@ -250,10 +250,7 @@ func (self *StateDB) DeleteStateObject(stateObject *StateObject) {
 
 	addr := stateObject.Address()
 	self.trie.Delete(addr[:])
-<<<<<<< HEAD
 	//delete(self.stateObjects, addr.Str())
-=======
->>>>>>> a0303ff4bdc17fba10baea4ce9ff250e5923efa2
 }
 
 // Retrieve a state object given my the address. Nil if not found
@@ -288,11 +285,7 @@ func (self *StateDB) SetStateObject(object *StateObject) {
 func (self *StateDB) GetOrNewStateObject(addr common.Address) *StateObject {
 	stateObject := self.GetStateObject(addr)
 	if stateObject == nil || stateObject.deleted {
-<<<<<<< HEAD
 		stateObject = self.CreateStateObject(addr)
-=======
-		stateObject = self.CreateAccount(addr)
->>>>>>> a0303ff4bdc17fba10baea4ce9ff250e5923efa2
 	}
 
 	return stateObject

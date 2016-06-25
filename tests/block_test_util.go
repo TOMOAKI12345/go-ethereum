@@ -148,11 +148,7 @@ func runBlockTests(homesteadBlock *big.Int, bt map[string]*BlockTest, skipTests 
 			continue
 		}
 		// test the block
-<<<<<<< HEAD
 		if err := runBlockTest(homesteadBlock, test); err != nil {
-=======
-		if err := runBlockTest(test); err != nil {
->>>>>>> a0303ff4bdc17fba10baea4ce9ff250e5923efa2
 			return fmt.Errorf("%s: %v", name, err)
 		}
 		glog.Infoln("Block test passed: ", name)

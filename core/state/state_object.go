@@ -84,7 +84,6 @@ type StateObject struct {
 	dirty   bool
 }
 
-<<<<<<< HEAD
 func NewStateObject(address common.Address, db trie.Database) *StateObject {
 	object := &StateObject{
 		db:       db,
@@ -93,33 +92,6 @@ func NewStateObject(address common.Address, db trie.Database) *StateObject {
 		dirty:    true,
 		codeHash: emptyCodeHash,
 		storage:  make(Storage),
-=======
-func (self *StateObject) Reset() {
-	self.storage = make(Storage)
-}
-
-func NewStateObject(address common.Address, db common.Database) *StateObject {
-	object := &StateObject{db: db, address: address, balance: new(big.Int), gasPool: new(big.Int), dirty: true}
-	object.trie = trie.NewSecure((common.Hash{}).Bytes(), db)
-	object.storage = make(Storage)
-	object.gasPool = new(big.Int)
-
-	return object
-}
-
-func NewStateObjectFromBytes(address common.Address, data []byte, db common.Database) *StateObject {
-	// TODO clean me up
-	var extobject struct {
-		Nonce    uint64
-		Balance  *big.Int
-		Root     common.Hash
-		CodeHash []byte
-	}
-	err := rlp.Decode(bytes.NewReader(data), &extobject)
-	if err != nil {
-		fmt.Println(err)
-		return nil
->>>>>>> a0303ff4bdc17fba10baea4ce9ff250e5923efa2
 	}
 	object.trie, _ = trie.NewSecure(common.Hash{}, db)
 	return object
